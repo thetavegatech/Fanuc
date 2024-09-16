@@ -1,0 +1,80 @@
+import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import logo from '../Images/User.png'; // Adjust the path to your image
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+
+const Sidebar = ({ collapsed, toggleSidebar }) => {
+  const navigate = useNavigate(); // Initialize useNavigate hook
+
+  const menuItems = [
+    { icon: 'bi bi-house-door-fill', text: 'Dashboard', path: '/' },
+    { icon: 'bi bi-tools', text: 'Add Asset', path: '/machineform' },
+    { icon: 'bi bi-graph-up', text: 'Breakdown', path: '/production-monitoring' },
+    { icon: 'bi bi-wrench', text: 'Mainten Schedule', path: '/breakdown-maintenance' },
+    { icon: 'bi bi-person-plus', text: 'Add Part', path: '/operator-management' },
+    { icon: 'bi bi-people-fill', text: 'Add Skills', path: '/tpm-management' },
+    { icon: 'bi bi-person-check-fill', text: 'Add Users', path: '/quality-management' },
+    { icon: 'bi bi-bar-chart-fill', text: 'Production Plan', path: '/reporting-analytics' },
+    { icon: 'bi bi-folder-fill', text: 'Add Tool Data', path: '/document-management' },
+    { icon: 'bi bi-bell-fill', text: 'TPMS', path: '/alert-notifications' },
+    { icon: 'bi bi-clock-fill', text: 'Add Shift', path: '/user-management' },
+    { icon: 'bi bi-card-list', text: 'PMC Parameters', path: '/user-management' },
+    { icon: 'bi bi-trophy-fill', text: 'Operator Performance', path: '/user-management' },
+  ];
+
+  return (
+    <div
+      className={`bg-dark text-white position-fixed d-flex flex-column`}
+      style={{
+        width: collapsed ? '70px' : '260px', // Adjust width when collapsed
+        height: '100vh', // Full viewport height
+        transition: 'width 0.3s ease', // Smooth transition for width
+        zIndex: 1000,
+        top: '60px', // Adjust top to create space between navbar and sidebar
+      }}
+    >
+      {/* Profile Section */}
+      <div className="text-center my-3">
+        <img
+          src={logo}
+          alt="User Profile"
+          onClick={toggleSidebar}
+          className="rounded-circle"
+          style={{
+            width: collapsed ? '40px' : '60px',
+            height: collapsed ? '40px' : '60px',
+            objectFit: 'cover',
+            transition: 'width 0.3s ease',
+          }}
+        />
+        {!collapsed && <div className="mt-2">Shyam Gaikwad</div>}
+      </div>
+
+      {/* Scrollable Sidebar Menu */}
+      <div
+        className="overflow-auto scrollbar-hidden flex-grow-1"
+        style={{
+          msOverflowStyle: 'none', // Hides scrollbar for IE and Edge
+          scrollbarWidth: 'none', // Hides scrollbar for Firefox
+          height: '100%', // Makes sure the menu area occupies the full available height
+          overflowY: 'scroll', // Allows vertical scrolling
+        }}
+      >
+        {menuItems.map((item, index) => (
+          <div className="col-12 mb-2" key={index}>
+            <button
+              className="d-flex align-items-center text-white text-decoration-none px-3 py-2 bg-transparent border-0 w-100"
+              onClick={() => navigate(item.path)} // Navigate to the respective path
+            >
+              <i className={`${item.icon} me-2`} style={{ fontSize: '1.2rem' }}></i>
+              <span className={`menu-text ${collapsed ? 'd-none' : ''}`}>{item.text}</span>
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default Sidebar;

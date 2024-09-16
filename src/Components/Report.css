@@ -1,0 +1,789 @@
+
+
+/* Header Styles */
+.header {
+    background-color: #ffffff;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid #fd7e14; /* Orange line */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+.header .logo {
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+.header .logo img {
+    margin-right: 10px;
+}
+.header .alerts {
+    display: flex;
+    align-items: center;
+}
+.header .alerts i {
+    margin-right: 5px;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    width: 250px;
+    min-height: 100vh;
+    background-color: #343a40;
+    color: white;
+    padding-top: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transition: width 0.3s;
+}
+.sidebar.collapsed {
+    width: 80px;
+}
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    display: block;
+    transition: background-color 0.2s;
+}
+.sidebar a:hover {
+    background-color: #495057;
+}
+.sidebar .menu-icon {
+    margin-right: 10px;
+}
+.sidebar.collapsed a .menu-text {
+    display: none;
+}
+.sidebar.collapsed a .menu-icon {
+    margin-right: 0;
+}
+
+/* Profile Styles */
+.profile {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.profile img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.profile.collapsed img {
+    width: 40px;
+    height: 40px;
+}
+.profile .name {
+    margin-top: 10px;
+    font-size: 16px;
+}
+.profile.collapsed .name {
+    display: none;
+}
+
+/* Footer Styles */
+.footer {
+    background-color: #fd7e14;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    margin-top: auto;
+}
+
+/* Content Area */
+.content {
+    margin-left: 0px; /* Push content right due to sidebar */
+    padding: 20px;
+    transition: margin-left 0.3s;
+    flex-grow: 1;
+}
+.sidebar.collapsed ~ .content {
+    margin-left: 80px;
+}
+
+
+
+.dashboard {
+width: 100%;
+max-width: 1200px;
+margin: 20px auto;
+padding: 20px;
+background-color: #fff;
+border-radius: 8px;
+box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+
+
+.company-name {
+font-size: 24px;
+font-weight: bold;
+color: #444;
+}
+.toggle-buttons {
+display: flex;
+border-radius: 20px;
+overflow: hidden;
+}
+
+.toggle-btn {
+flex: 1;
+padding: 10px 20px;
+border: none;
+
+cursor: pointer;
+outline: none;
+transition: background-color 0.3s;
+}
+
+.toggle-btn.active {
+background-color: #007bff;
+color: #6d2929;
+}
+
+.toggle-btn:first-child {
+border-radius: 20px 0 0 20px; /* Oval shape at the start */
+}
+
+.toggle-btn:last-child {
+border-radius: 0 20px 20px 0; /* Oval shape at the end */
+}
+
+.toggle-btn:not(:last-child) {
+border-right: 1px solid #7d5a5a;
+}
+
+
+
+.date-range {
+font-size: 14px;
+display: flex;
+align-items: center;
+gap: 5px;
+}
+
+.search-machine {
+display: flex;
+align-items: center;
+}
+
+.search-machine input {
+padding: 5px;
+margin-right: 5px;
+}
+
+/* Style for the nav element */
+
+.nav1 {
+
+width: 100%; /* Cover full width of the screen */
+background-color: #ff7f0e; /* Background color for the nav bar */
+height: 40px; /* Adjust height as needed */
+}
+
+
+.nav1 ul li {
+color: #fdfdfd; /* Text color */
+font-weight: bold; /* Font weight */
+}
+
+/* Style for the nav element */
+nav {
+width: 100%; /* Cover full width of the screen */
+background-color: #f8f9fa; /* Background color for the nav bar */
+height: 60px; /* Adjust height as needed */
+}
+
+/* Style for the ul element */
+nav ul {
+display: flex;
+justify-content: space-between; /* Distribute items evenly */
+align-items: center; /* Center items vertically */
+list-style: none; /* Remove default list styling */
+padding: 0;
+margin: 0;
+height: 100%; /* Full height of the nav */
+}
+
+/* Style for the li elements */
+nav ul li {
+flex: 1; /* Make each item take up equal space */
+text-align: center; /* Center text within each item */
+position: relative; /* For positioning the vertical line and hover underline */
+padding: 0 20px; /* Horizontal padding */
+}
+
+nav ul li a{
+    color: #151515; /* Text color */
+  
+    }
+    
+/* Add vertical lines between the items */
+nav ul li:not(:last-child)::after {
+content: "";
+position: absolute;
+right: 0; /* Position the line to the right of the list item */
+top: 0;
+bottom: 0;
+width: 1px; /* Width of the vertical line */
+background-color: #ccc; /* Color of the vertical line */
+}
+
+/* Optional: Styling for the nav items */
+nav ul li {
+color: #333; /* Text color */
+font-weight: bold;
+font-size: 20px; 
+padding-bottom: 10px;
+}
+
+/* Add a hover line below the nav bar items */
+nav ul li::before {
+content: "";
+position: absolute;
+left: 50%;
+bottom: 0;
+width: 0; /* Start with no underline */
+height: 2px; /* Height of the hover line */
+background-color: transparent; /* Initially transparent */
+transition: all 0.3s; /* Smooth transition for hover effect */
+}
+
+/* Hover effect: expand the line and change color */
+nav ul li:hover::before {
+
+width: 100%;
+height: 4px; /* Full width of the item */
+background-color: #007bff; /* Blue color on hover */
+left: 0; /* Align from the left */
+}
+
+/* Optional: Styling for hover state */
+nav ul li:hover {
+
+color: #007bff; /* Change text color on hover */
+}
+
+.nav1 ul li {
+color: #fdfdfd; /* Text color */
+font-weight: bold; /* Font weight */
+}
+
+
+
+.monitoring-section {
+display: flex;
+flex-wrap: wrap;
+gap: 20px;
+padding: 20px;
+background-color: #ffffff;
+}
+
+.machine-info {
+display: flex;
+flex-direction: row; /* Make the whole part in a single row */
+align-items: center;
+justify-content: space-between;
+padding: 15px;
+background-color: #f9f9f9;
+border-radius: 8px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+text-align: left;
+}
+
+.machine-header {
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+flex: 1;
+}
+
+.machine-header h2 {
+font-size: 28px;
+margin: 0;
+color: #ff9800;
+}
+
+.machine-details {
+display: flex;
+align-items: center;
+gap: 15px; /* Add some space between elements */
+flex: 2;
+}
+
+.work-time {
+background-color: #d1ecf1;
+padding: 8px 12px;
+border-radius: 5px;
+font-weight: bold;
+color: #333;
+}
+
+.downtime-reason-btn {
+background-color: #ff5722;
+color: #fff;
+border: none;
+padding: 10px;
+cursor: pointer;
+border-radius: 5px;
+}
+
+.idle-info {
+background-color: #ff9800;
+padding: 5px 10px;
+color: #fff;
+border-radius: 5px;
+}
+.container {
+display: flex;
+align-items: center;
+gap: 10px;
+}
+
+.date-range {
+display: flex;
+align-items: center;
+gap: 5px;
+}
+
+.date-range input[type="date"] {
+padding: 5px;
+}
+
+.icon-container {
+display: flex;
+align-items: center;
+}
+
+.download-icon {
+background-color: orange;
+border: none;
+color: white;
+font-size: 20px;
+padding: 5px;
+border-radius: 50%;
+cursor: pointer;
+transition: background-color 0.3s;
+}
+
+.download-icon:hover {
+background-color: darkorange;
+}
+
+/* Apply margins to the sides of each section */
+.toggle-buttons, .date-range, .icon-container, .search-machine {
+margin-left: 16px;  /* Adjust margin as needed */
+margin-right: 16px; /* Adjust margin as needed */
+}
+
+
+
+.date-range {
+display: flex;
+align-items: center;
+gap: 8px; /* Space between elements */
+}
+
+/* Styling for icon container */
+.icon-container {
+display: flex;
+justify-content: center;
+}
+
+.download-icon {
+background: none;
+border: none;
+font-size: 24px;
+cursor: pointer;
+}
+
+/* Styling for search machine */
+.search-machine {
+display: flex;
+align-items: center;
+gap: 8px; /* Space between input and button */
+}
+
+.search-machine label {
+margin-right: 8px; /* Space between label and button */
+}
+
+.search-icon {
+background: none;
+border: none;
+font-size: 24px;
+cursor: pointer;
+}
+
+.availability-info, .parts-behind, .downtime-info, .rejected-parts-info {
+flex: 1 1 30%;
+padding: 15px;
+background-color: #f9f9f9;
+border-radius: 8px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+text-align: center;
+}
+
+.machine-info h2 {
+font-size: 28px;
+margin: 0;
+color: #ff9800;
+}
+
+.downtime-reason-btn {
+background-color: #ff5722;
+color: #fff;
+border: none;
+padding: 10px;
+cursor: pointer;
+margin-top: 10px;
+border-radius: 5px;
+}
+
+.idle-info {
+background-color: #ff9800;
+padding: 5px;
+color: #fff;
+margin-top: 10px;
+border-radius: 5px;
+}
+
+.availability, .quality {
+text-align: center;
+}
+
+.availability-graph, .quality-graph {
+display: flex;
+justify-content: space-around;
+margin-top: 10px;
+height: 100px;
+}
+
+.bar {
+width: 20px;
+background-color: #4caf50;
+}
+
+.circle {
+width: 100px;
+height: 100px;
+background-color: #2196f3;
+border-radius: 50%;
+text-align: center;
+line-height: 100px;
+font-size: 20px;
+color: #fff;
+margin: 0 auto;
+margin-top: 10px;
+}
+
+.downtime-info, .rejected-parts-info {
+text-align: left;
+}
+
+.downtime-info ul, .rejected-parts-info ul {
+padding-left: 20px;
+margin: 10px 0;
+}
+.header1 {
+background-color: #ff7f0e; /* Dark Orange */
+padding: px;
+text-align: center;
+color: white;
+font-size: 28px;
+}
+
+.container {
+padding: 20px;
+display: grid;
+grid-template-columns: 1fr 1fr 1fr;
+gap: 20px;
+text-align: center;
+}
+
+.button-container {
+display: flex;
+justify-content: center;
+margin: 10px 0;
+}
+
+.button {
+padding: 10px 20px;
+border: none;
+border-radius: 30px;
+background-color: white;
+color: #ff7f0e;
+font-size: 16px;
+cursor: pointer;
+}
+.button1 {
+padding: 10px 20px;
+border: none;
+border-radius: 30px;
+background-color: white;
+color: #ff7f0e;
+font-size: 16px;
+cursor: pointer;
+align-items: center;
+
+}
+
+.graph-container {
+background-color: #fff;
+padding: 20px;
+border-radius: 8px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.bar-graph {
+width: 100%;
+height: 150px;
+display: flex;
+justify-content: space-around;
+align-items: flex-end;
+position: relative;
+}
+
+.bar {
+width: 30px;
+background-color: #4CAF50;
+}
+
+.bar1 {
+height: 100px;
+}
+
+.bar2 {
+height: 120px;
+}
+
+.bar3 {
+height: 0px;
+}
+
+.bar4 {
+height: 0px;
+}
+
+.bar-graph-scale {
+position: absolute;
+left: -40px;
+top: 0;
+bottom: 0;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+}
+
+.bar-graph-scale span {
+font-size: 12px;
+}
+
+
+
+
+.table-wrapper {
+    max-height: 120px;  /* Reduced height to minimize table size */
+    overflow-y: auto;   /* Enables vertical scrolling */
+  }
+  
+  .table {
+    width: 100%;
+  }
+  
+  .graph {
+    margin-bottom: 20px;
+  }
+
+  .stat-item {
+    position: relative;
+  }
+  
+  .vertical-line {
+    position: absolute;
+    right: 0; /* Align to the right of the parent */
+    top: 0;
+    bottom: 0;
+    width: 2px; /* Width of the line */
+    background-color: #ccc; /* Color of the line */
+    margin-left: 2px; /* Spacing between heading and line */
+  }
+ 
+  
+
+
+.label-section {
+grid-column: 1 / span 3;
+background-color: #ff7f0e;
+
+color: white;
+font-size: 14px;
+}
+
+.stats {
+display: flex;
+justify-content: space-around;
+flex-wrap: wrap;
+}
+
+.stat-item {
+text-align: left;
+}
+.bar-chart canvas{
+width: 100%;   /* Make sure the canvas takes full width of its container */
+height: 300px; /* Fixed height to ensure consistent rendering */
+}
+.pie-chart canvas {
+width: 100%;   /* Make sure the canvas takes full width of its container */
+height: 300px; /* Fixed height to ensure consistent rendering */
+}
+.button1.overlay-button {
+position: absolute; /* Position the button absolutely inside the relative pie-container */
+top: 50%; /* Center vertically */
+left: 40%; /* Center horizontally */
+transform: translate(-50%, -50%); /* Adjust for proper centering */
+background-color:transparent; /* Customize the button style */
+color:black;
+padding: 10px 20px;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+z-index: 10; /* Ensure the button appears above the chart */
+}
+.container {
+display: flex;
+justify-content: space-around;
+align-items: center;
+gap: 20px; /* Adjust gap as needed */
+position: relative; /* Needed for positioning button over the pie chart */
+}
+
+.pie-chart {
+ /* Make this relative to position elements inside it */
+width: 400px; /* Set a fixed width */
+height: 300px; /* Set a fixed height */
+}
+
+.pie-container {
+position: relative; /* Parent container of the canvas and button */
+}
+.download-icon i {
+font-size: 2rem; /* Adjust as needed */
+color: #333; /* Adjust as needed */
+}
+
+
+.nav1 h5, .nav1 h4, .nav1 p {
+margin: 0; /* Remove default margin */
+padding: 0; /* Remove default padding */
+line-height: 1; /* Adjust line height */
+font-size: 1rem;
+}
+
+.minimized-nav {
+    font-size: 0.8rem; /* Reduce font size */
+    line-height: 1; /* Decrease the line height to make everything more compact */
+  }
+
+  .nav1 ul {
+    padding: 0;
+    margin: 0;
+  }
+  
+  .nav1 li {
+    padding: 0;
+    margin: 0 10px; /* Reduce spacing between list items */
+  }
+
+.nav1 li h4 {
+margin-bottom: 0; /* Remove margin below the element */
+}
+
+.nav1 li p {
+margin-top: 0; /* Remove margin above the element */
+margin-bottom: 0; /* Remove margin below the element */
+line-height: 1; /* Adjust line height */
+}
+.stat-item {
+display: flex; /* Align items horizontally */
+justify-content: space-between; /* Space between text and details */
+align-items: flex-start; /* Align items to the start vertically */
+margin-bottom: 5px; /* Add space between different stat-items */
+}
+
+.text {
+text-align: left; /* Align text to the left */
+margin-right: 20px;
+color: blueviolet; /* Add space between the text div and the details div */
+}
+
+.details {
+text-align: right; /* Align text to the right */
+}
+
+
+
+.filter-container {
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.filter-buttons button {
+    font-size: 14px;
+    padding: 5px 10px;
+}
+
+.datetime-filter input {
+    font-size: 14px;
+    padding: 5px 10px;
+}
+
+.download-btn {
+    margin-top: 10px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+}
+.mt-4 {
+margin-top: 0.5rem !important;
+}
+.search-box input {
+    padding-left: 30px;
+}
+
+.search-icon {
+    position: absolute;
+    margin-left: 10px;
+}
+
+@media (max-width: 768px) {
+    .filter-buttons,
+    .datetime-filter,
+    .download-btn,
+    .search-box {
+        margin-bottom: 10px;
+    }
+
+    .search-box input {
+        width: 100%;
+    }
+}
+
+.small-text {
+    font-size: 1.0rem; /* Adjust size as needed */
+  }
+  
+  .nav1 ul li {
+    margin-bottom: 0; /* Ensure no extra spacing */
+  }
+
+

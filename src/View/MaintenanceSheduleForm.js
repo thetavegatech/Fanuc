@@ -1,0 +1,273 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+// import 'bootstrap/dist/css/bootstrap.min.css';
+
+const MaintenanceScheduleForm = () => {
+  const [schedules, setSchedules] = useState([]);
+  const [formData, setFormData] = useState({
+    machineId: '',
+    elementId: '',
+    elementName: '',
+    elementDescription: '',
+    type: '',
+    frequency: '',
+    conditionTag: '',
+    remark: ''
+  });
+  const [isEditing, setIsEditing] = useState(false);
+  const [editId, setEditId] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+
+  // Fetch maintenance schedules on component mount
+  useEffect(() => {
+    fetchSchedules();
+  }, []);
+
+  const mid = "101"
+
+  const fetchSchedules = async () => {
+    try {
+      const response = await axios.get(`http://localhost:5001/api/maintenance/machine/${mid}`);
+      setSchedules(response.data);
+    } catch (error) {
+      console.error('Error fetching maintenance schedules:', error);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (isEditing) {
+      await axios.put(`http://localhost:5001/api/maintenance/${editId}`, formData);
+      setIsEditing(false);
+      setEditId(null);
+    } else {
+      await axios.post('http://localhost:5001/api/maintenance', formData);
+    }
+    fetchSchedules(); // Refresh schedule list
+    resetForm();
+    setShowForm(false); // Hide the form after submission
+  };
+
+  const resetForm = () => {
+    setFormData({
+      machineId: '',
+      elementId: '',
+      elementName: '',
+      elementDescription: '',
+      type: '',
+      frequency: '',
+      conditionTag: '',
+      remark: ''
+    });
+  };
+
+  const handleEdit = (schedule) => {
+    setIsEditing(true);
+    setEditId(schedule.elementId);
+    setFormData(schedule);
+    setShowForm(true); // Show the form when editing
+  };
+
+  const handleDelete = async (id) => {
+    await axios.delete(`/api/maintenance/${id}`);
+    fetchSchedules(); // Refresh schedule list
+  };
+
+  const handleAddClick = () => {
+    setShowForm(true); // Show the form when adding new data
+    setIsEditing(false);
+    resetForm(); // Reset form fields
+  };
+
+  return (
+    <div className="container3 ">
+      <h2 >Manage Maintenance Schedules</h2>
+
+      {/* Button to Show Form */}
+      {!showForm && (
+        <button className="btn btn-primary mb-4" onClick={handleAddClick}>
+          Add Schedule
+        </button>
+      )}
+
+      {/* Form to Add/Edit Maintenance Schedule */}
+      {showForm && (
+        <form onSubmit={handleSubmit}>
+          <div className="row">
+            <div className="col-md-4">
+              <div className="inline-form-group">
+                <label>Machine ID</label>
+                <input
+                  type="text"
+                  name="machineId"
+                  className="underline-input"
+                  value={formData.machineId}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="inline-form-group">
+                <label>Element ID</label>
+                <input
+                  type="text"
+                  name="elementId"
+                  className="underline-input"
+                  value={formData.elementId}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="inline-form-group">
+                <label>Element Name</label>
+                <input
+                  type="text"
+                  name="elementName"
+                  className="underline-input"
+                  value={formData.elementName}
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-md-4">
+              <div className="inline-form-group">
+                <label>Element Description</label>
+                <input
+                  type="text"
+                  name="elementDescription"
+                  className="underline-input"
+                  value={formData.elementDescription}
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="inline-form-group">
+                <label>Type</label>
+                <input
+                  type="text"
+                  name="type"
+                  className="underline-input"
+                  value={formData.type}
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="inline-form-group">
+                <label>Frequency</label>
+                <input
+                  type="text"
+                  name="frequency"
+                  className="underline-input"
+                  value={formData.frequency}
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-md-4">
+              <div className="inline-form-group">
+                <label>Condition Tag</label>
+                <input
+                  type="text"
+                  name="conditionTag"
+                  className="underline-input"
+                  value={formData.conditionTag}
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="inline-form-group">
+                <label>Remark</label>
+                <input
+                  type="text"
+                  name="remark"
+                  className="underline-input"
+                  value={formData.remark}
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" className="btn btn-primary">
+            {isEditing ? 'Update Schedule' : 'Add Schedule'}
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary ms-2"
+            onClick={() => setShowForm(false)}
+          >
+            Cancel
+          </button>
+        </form>
+      )}
+
+      {/* Display Table of Maintenance Schedules */}
+      {!showForm && (
+        <>
+          {/* <h2 className="mt-5">Maintenance Schedule List</h2> */}
+          <table className="table table-bordered">
+            <thead>
+              <tr>
+                <th>Machine ID</th>
+                <th>Element ID</th>
+                <th>Element Name</th>
+                {/* <th>Element Description</th> */}
+                <th>Type</th>
+                <th>Frequency</th>
+                <th>Condition Tag</th>
+                <th>Remark</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {schedules.map((schedule) => (
+                <tr key={schedule._id}>
+                  <td>{schedule.machineId}</td>
+                  <td>{schedule.elementId}</td>
+                  <td>{schedule.elementName}</td>
+                  {/* <td>{schedule.elementDescription}</td> */}
+                  <td>{schedule.type}</td>
+                  <td>{schedule.frequency}</td>
+                  <td>{schedule.conditionTag}</td>
+                  <td>{schedule.remark}</td>
+                  <td>
+                    <button
+                      className="btn btn-warning btn-sm me-2"
+                      onClick={() => handleEdit(schedule)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="btn btn-danger btn-sm"
+                      onClick={() => handleDelete(schedule.elementId)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      )}
+    </div>
+  );
+};
+
+export default MaintenanceScheduleForm;
