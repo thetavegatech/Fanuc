@@ -145,7 +145,7 @@ const OperatorPerformanceform = () => {
           </table>
         </>
       ) : (
-        <form onSubmit={handleFormSubmit} className="row g-3">
+        <form onSubmit={handleFormSubmit} style={{marginTop: "3rem"}} className="row g-3">
           <div className="col-md-4">
             <label className="form-label">Efficiency</label>
             <input

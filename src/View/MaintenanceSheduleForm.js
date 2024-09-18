@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
 const MaintenanceScheduleForm = () => {
@@ -7,7 +7,7 @@ const MaintenanceScheduleForm = () => {
   const [formData, setFormData] = useState({
     machineId: '',
     elementId: '',
-    elementName: '',
+    elementName: '', // Added field for Element Name
     elementDescription: '',
     type: '',
     frequency: '',
@@ -17,27 +17,93 @@ const MaintenanceScheduleForm = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editId, setEditId] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [machineIds, setMachineIds] = useState([]);
+  const [elements, setElements] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Fetch maintenance schedules on component mount
+  // Frequency options
+  const frequencyOptions = [
+    'Daily',
+    'Weekly',
+    'Monthly',
+    'Quarterly',
+    'Yearly'
+  ];
+
+  // Fetch machine data on component mount
+  useEffect(() => {
+    fetchMachineData();
+  }, []);
+
+  // Fetch schedules from the API
   useEffect(() => {
     fetchSchedules();
   }, []);
 
-  const mid = "101"
+  // Fetch machine IDs
+  const fetchMachineData = async () => {
+    try {
+      const response = await axios.get('http://localhost:5001/api/machines/ORG001');
+      const machineIds = response.data.map(machine => machine.machineId);
+      setMachineIds(machineIds);
+      setLoading(false);
+    } catch (err) {
+      setError('Error fetching machine data');
+      setLoading(false);
+    }
+  };
 
+  // Fetch maintenance schedules
   const fetchSchedules = async () => {
     try {
-      const response = await axios.get(`http://localhost:5001/api/maintenance/machine/${mid}`);
+      const response = await axios.get('http://localhost:5001/api/maintenance');
       setSchedules(response.data);
     } catch (error) {
       console.error('Error fetching maintenance schedules:', error);
     }
   };
 
+  // Fetch elements based on selected machine ID
+  const fetchElementsByMachineId = async (machineId) => {
+    try {
+      const response = await axios.get(`http://localhost:5001/api/elements/machine/${machineId}`);
+      setElements(response.data);
+    } catch (err) {
+      console.error('Error fetching elements:', err);
+    }
+  };
+
+  // Handle machine ID change
+  const handleMachineIdChange = (e) => {
+    const selectedMachineId = e.target.value;
+    setFormData({ ...formData, machineId: selectedMachineId, elementId: '' });
+    fetchElementsByMachineId(selectedMachineId); // Fetch elements when machine ID changes
+  };
+
+  // Handle element change
+  const handleElementChange = (e) => {
+    const selectedElementId = e.target.value;
+    const selectedElement = elements.find(element => element._id === selectedElementId);
+    setFormData({
+      ...formData,
+      elementId: selectedElementId,
+      elementName: selectedElement ? selectedElement.ElementName : '', // Save Element Name
+      elementDescription: selectedElement ? selectedElement.ElementDescription : ''
+    });
+  };
+
+  // Handle form input changes
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Handle frequency change
+  const handleFrequencyChange = (e) => {
+    setFormData({ ...formData, frequency: e.target.value });
+  };
+
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isEditing) {
@@ -47,16 +113,17 @@ const MaintenanceScheduleForm = () => {
     } else {
       await axios.post('http://localhost:5001/api/maintenance', formData);
     }
-    fetchSchedules(); // Refresh schedule list
+    fetchSchedules();
     resetForm();
-    setShowForm(false); // Hide the form after submission
+    setShowForm(false);
   };
 
+  // Reset form data
   const resetForm = () => {
     setFormData({
       machineId: '',
       elementId: '',
-      elementName: '',
+      elementName: '', // Reset Element Name
       elementDescription: '',
       type: '',
       frequency: '',
@@ -65,27 +132,30 @@ const MaintenanceScheduleForm = () => {
     });
   };
 
+  // Handle edit
   const handleEdit = (schedule) => {
     setIsEditing(true);
-    setEditId(schedule.elementId);
+    setEditId(schedule._id);
     setFormData(schedule);
-    setShowForm(true); // Show the form when editing
+    setShowForm(true);
   };
 
+  // Handle delete
   const handleDelete = async (id) => {
-    await axios.delete(`/api/maintenance/${id}`);
-    fetchSchedules(); // Refresh schedule list
+    await axios.delete(`http://localhost:5001/api/maintenance/${id}`);
+    fetchSchedules();
   };
 
+  // Handle add button click
   const handleAddClick = () => {
-    setShowForm(true); // Show the form when adding new data
+    setShowForm(true);
     setIsEditing(false);
-    resetForm(); // Reset form fields
+    resetForm();
   };
 
   return (
     <div className="container3 ">
-      <h2 >Manage Maintenance Schedules</h2>
+      <h2>Manage Maintenance Schedules</h2>
 
       {/* Button to Show Form */}
       {!showForm && (
@@ -96,35 +166,79 @@ const MaintenanceScheduleForm = () => {
 
       {/* Form to Add/Edit Maintenance Schedule */}
       {showForm && (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} style={{ marginTop: "3rem" }}>
           <div className="row">
             <div className="col-md-4">
               <div className="inline-form-group">
                 <label>Machine ID</label>
-                <input
-                  type="text"
-                  name="machineId"
+                {loading ? (
+                  <p>Loading machine IDs...</p>
+                ) : error ? (
+                  <p>{error}</p>
+                ) : (
+                  <select
+                    name="machineId"
+                    style={{ marginTop: "1rem" }}
+                    className="underline-input"
+                    value={formData.machineId}
+                    onChange={handleMachineIdChange}
+                    required
+                  >
+                    <option value="" disabled>
+                      Select Machine ID
+                    </option>
+                    {machineIds.map((id, index) => (
+                      <option key={index} value={id}>
+                        {id}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
+            </div>
+
+            <div className="col-md-4">
+              <div className="inline-form-group">
+                <label>Element ID</label>
+
+                <label>Element</label>
+                <select
+                  name="elementId"
+                  style={{ marginTop: "1rem" }}
                   className="underline-input"
-                  value={formData.machineId}
-                  onChange={handleInputChange}
+                  value={formData.elementId}
+                  onChange={handleElementChange}
                   required
-                />
+                >
+                  <option value="" disabled>
+                    Select Element
+                  </option>
+                  {elements.map((element) => (
+                    <option key={element._id} value={element._id}>
+                      {element.ElementName}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
             <div className="col-md-4">
               <div className="inline-form-group">
-                <label>Element ID</label>
-                <input
-                  type="text"
-                  name="elementId"
+                <label>Frequency</label>
+                <select
+                  name="frequency"
                   className="underline-input"
-                  value={formData.elementId}
-                  onChange={handleInputChange}
-                  required
-                />
+                  style={{ marginTop: "1rem" }}
+                  value={formData.frequency}
+                  onChange={handleFrequencyChange}
+                >
+                  <option value="" disabled>Select Frequency</option>
+                  {frequencyOptions.map((option, index) => (
+                    <option key={index} value={option}>{option}</option>
+                  ))}
+                </select>
               </div>
             </div>
-            <div className="col-md-4">
+            {/* <div className="col-md-4">
               <div className="inline-form-group">
                 <label>Element Name</label>
                 <input
@@ -135,7 +249,7 @@ const MaintenanceScheduleForm = () => {
                   onChange={handleInputChange}
                 />
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div className="row">
@@ -163,18 +277,7 @@ const MaintenanceScheduleForm = () => {
                 />
               </div>
             </div>
-            <div className="col-md-4">
-              <div className="inline-form-group">
-                <label>Frequency</label>
-                <input
-                  type="text"
-                  name="frequency"
-                  className="underline-input"
-                  value={formData.frequency}
-                  onChange={handleInputChange}
-                />
-              </div>
-            </div>
+            
           </div>
 
           <div className="row">
@@ -205,7 +308,7 @@ const MaintenanceScheduleForm = () => {
           </div>
 
           <button type="submit" className="btn btn-primary">
-            {isEditing ? 'Update Schedule' : 'Add Schedule'}
+            {isEditing ? "Update Schedule" : "Add Schedule"}
           </button>
           <button
             type="button"

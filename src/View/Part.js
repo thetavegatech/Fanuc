@@ -18,14 +18,16 @@ const PartForm = () => {
     fetchParts();
   }, []);
 
-  const mid = "101";
+  const mid = "MACHINE457"; // Static machine ID for demonstration purposes
 
   const fetchParts = async () => {
     try {
-      const response = await axios.get(`http://localhost:5001/api/part`);
+      const response = await axios.get(`http://localhost:5001/api/part/getall`);
       setParts(response.data);
     } catch (error) {
+      // window.alert("Part is allready exist against the Machine")
       console.error('Error fetching part data:', error);
+     
     }
   };
 
@@ -36,16 +38,22 @@ const PartForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isEditing) {
-      await axios.put(`http://localhost:5001/api/part/update/${editId}`, formData);
-      setIsEditing(false);
-      setEditId(null);
-    } else {
-      await axios.post('http://localhost:5001/api/part/create', formData);
+    try {
+      if (isEditing) {
+        await axios.put(`http://localhost:5001/api/part/update/${editId}`, formData);
+        window.alert('Record updated successfully!');
+        setIsEditing(false);
+        setEditId(null);
+      } else {
+        await axios.post('http://localhost:5001/api/part/create', formData);
+        window.alert('Record created successfully!');
+      }
+      fetchParts(); // Refresh parts list
+      resetForm();
+      setShowForm(false); // Hide form after submission
+    } catch (error) {
+      console.error('Error saving part data:', error);
     }
-    fetchParts(); // Refresh parts list
-    resetForm();
-    setShowForm(false); // Hide form after submission
   };
 
   const resetForm = () => {
@@ -64,8 +72,16 @@ const PartForm = () => {
   };
 
   const handleDelete = async (id) => {
-    await axios.delete(`http://localhost:5001/api/part/delete/${id}`);
-    fetchParts(); // Refresh parts list
+    const confirmDelete = window.confirm('Are you sure you want to delete this record?');
+    if (confirmDelete) {
+      try {
+        await axios.delete(`http://localhost:5001/api/part/delete/${id}`);
+        window.alert('Record deleted successfully!');
+        fetchParts(); // Refresh parts list
+      } catch (error) {
+        console.error('Error deleting part:', error);
+      }
+    }
   };
 
   const handleAdd = () => {
@@ -74,6 +90,29 @@ const PartForm = () => {
     resetForm();
     setShowForm(true); // Show form for adding
   };
+
+
+  const [machineIds, setMachineIds] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Function to fetch machine data and extract only the machine IDs
+  const fetchMachineData = async () => {
+    try {
+      const response = await axios.get('http://localhost:5001/api/machines/ORG001');
+      const machineIds = response.data.map(machine => machine.machineId); // Extract machine IDs
+      setMachineIds(machineIds); // Set only the machine IDs in state
+      setLoading(false); // Set loading to false after data is loaded
+    } catch (err) {
+      setError('Error fetching machine data');
+      setLoading(false); // Ensure loading is stopped in case of an error
+    }
+  };
+
+  // Use useEffect to fetch data when the component mounts
+  useEffect(() => {
+    fetchMachineData();
+  }, []);
 
   return (
     <div className="container3">
@@ -90,7 +129,7 @@ const PartForm = () => {
 
       {/* Conditionally Render Form */}
       {showForm && (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} style={{marginTop: "3rem"}}>
           <div style={{ marginLeft: "1rem"}} className="row">
             <div className="col-md-4 mb-3">
               <div className="inline-form-group">
@@ -120,18 +159,30 @@ const PartForm = () => {
                 />
               </div>
             </div>
-            <div className="col-md-4 mb-3">
+            <div className="col-md-4">
               <div className="inline-form-group">
-                <label htmlFor="machineId">Machine ID</label>
-                <input
-                  type="text"
-                  id="machineId"
-                  name="machineId"
-                  className="underline-input"
-                  value={formData.machineId}
-                  onChange={handleInputChange}
-                  required
-                />
+                <label>Machine ID</label>
+
+                {/* Loading state */}
+                {loading ? (
+                  <p>Loading machine IDs...</p>
+                ) : error ? (
+                  <p>{error}</p> // Show error message if there is an error
+                ) : (
+                  <select
+                    name="machineId"
+                    style={{ marginTop: "1rem"}}
+                    className="underline-input"
+                    value={formData.machineId}
+                    onChange={handleInputChange}
+                    required
+                  >
+                    <option value="" disabled>Select Machine ID</option>
+                    {machineIds.map((id, index) => (
+                      <option key={index} value={id}>{id}</option>
+                    ))}
+                  </select>
+                )}
               </div>
             </div>
           </div>
