@@ -1,63 +1,102 @@
 
 import { useParams, Link } from 'react-router-dom';
-import React from 'react';
+import React,{useState, useEffect} from 'react';
 import { Container, Row, Col, Table, Navbar, Nav, Footer, Button, Form, InputGroup } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Files from './Files';
+import axios from 'axios'; // Import axios for API calls
 
 const MachineDetails = () => {
   const { id } = useParams();  // Extract the machine ID from the URL
+  const [alerts, setAlerts] = useState([]); // State to hold alerts data
+  const [loading, setLoading] = useState(true); // State to manage loading state
+  const [error, setError] = useState(null); // State to manage errors
+
+   // Fetch alerts data when component mounts or when machineId changes
+   useEffect(() => {
+    const fetchAlertsData = async () => {
+      try {
+        // Replace with your actual API endpoint
+        const response = await axios.get(`http://localhost:5001/api/alerts`);
+        setAlerts(response.data); // Set the alerts data
+        setLoading(false); // Set loading to false after data is fetched
+      } catch (err) {
+        console.error('Error fetching alerts data:', err);
+        setError('Failed to fetch alerts data');
+        setLoading(false);
+      }
+    };
+
+    fetchAlertsData();
+  }, [id]); // Re-fetch data when the machine ID changes
+
 
   return (
     <div
+    fluid
       style={{
-        backgroundColor: 'white',
-        maxWidth: '100%',
-        borderRadius: '8px',
-        padding: '0px',
-        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
-        marginTop: '55px',
-        height: 'auto',
+        backgroundColor: "white",
+        maxWidth: "100%",
+        borderRadius: "8px",
+        padding: "2px",
+        boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+        marginTop: "50px",
+        height: "Auto"
       }}
-    >
-      {/* Top Filters */}
-      <Row
-        style={{
-          backgroundColor: '#f2f2f2',
-          padding: '8px',
-          borderRadius: '2px',
-          marginLeft: '1px',
-        }}
-        className="align-items-center"
       >
-        <Col xs={12} md={5} className="d-flex justify-content-between mb-3 mb-md-0" style={{ gap: '10px' }}>
-          <Button variant="primary" style={{ flex: '1' }}>
-            This Shift
-          </Button>
-          <Button variant="secondary" style={{ flex: '1' }}>
-            Last Shift
-          </Button>
-          <Button variant="success" style={{ flex: '1' }}>
-            Last Hr
-          </Button>
-          <Button variant="info" style={{ flex: '1' }}>
-            Today
-          </Button>
-        </Col>
 
-        <Col xs={12} md={4} className="d-flex justify-content-md-center mb-3 mb-md-0">
-          <InputGroup>
-            <InputGroup.Text>From:</InputGroup.Text>
-            <Form.Control type="date" />
-            <InputGroup.Text>To:</InputGroup.Text>
-            <Form.Control type="date" />
-          </InputGroup>
-        </Col>
+      {/* Top Filters */}
+      <Row className="align-items-center bg-transparent p-2 rounded mt-2">
+  <Col xs={12} md={5} className="mb-3 mb-md-0">
+    <Row className="g-2 ms-1">
+      <Col xs={6} md={3}>
+        <Button variant="primary"
+          className="w-100 border-primary text-primary bg-transparent d-flex align-items-center justify-content-center"
+          style={{ borderWidth: '2px', height: "2rem" }} // Maintain height for buttons
+        >
+          This Shift
+        </Button>
+      </Col>
+      <Col xs={6} md={3}>
+        <Button variant="secondary"
+          className="w-100 border-secondary text-secondary bg-transparent d-flex align-items-center justify-content-center"
+          style={{ borderWidth: '2px', height: "2rem", flex: '1'  }}
+        >
+          Last Shift
+        </Button>
+      </Col>
+      <Col xs={6} md={3}>
+        <Button variant="success"
+          className="w-100 border-success text-success bg-transparent d-flex align-items-center justify-content-center"
+          style={{ borderWidth: '2px', height: "2rem" }}
+        >
+          Last Hr
+        </Button>
+      </Col>
+      <Col xs={6} md={3}>
+        <Button variant="info"
+          className="w-100 border-info text-info bg-transparent d-flex align-items-center justify-content-center"
+          style={{ borderWidth: '2px', height: "2rem" }}
+        >
+          Today
+        </Button>
+      </Col>
+    </Row>
+  </Col>
 
-        <Col xs={12} md={3} className="d-flex justify-content-md-end">
-          <Form.Control type="search" placeholder="Search" style={{ width: '100%', maxWidth: '200px' }} />
-        </Col>
-      </Row>
+  <Col xs={12} md={3} className="mb-3 mb-md-0">
+    <InputGroup className="align-items-center">
+      <InputGroup.Text style={{ height: '2rem', lineHeight: '2rem' }}>From:</InputGroup.Text>
+      <Form.Control type="date" className="form-control form-control-sm" style={{ height: '2rem' }} />
+      <InputGroup.Text style={{ height: '2rem', lineHeight: '2rem' }}>To:</InputGroup.Text>
+      <Form.Control type="date" className="form-control form-control-sm" style={{ height: '2rem' }} />
+    </InputGroup>
+  </Col>
+
+  <Col xs={12} md={4} className="d-flex justify-content-md-center mb-3 mb-md-0">
+    <Form.Control type="search" placeholder="Search" className="w-100 form-control-sm" style={{ maxWidth: "200px", height: '2rem' }} />
+  </Col>
+</Row>
 
       {/* Navigation */}
       {/* <Navbar style={{ backgroundColor: '#ff7f0e' }} className="text-white">
@@ -143,30 +182,31 @@ const MachineDetails = () => {
             <tr>
               <th>#</th>
               <th>Description</th>
-              <th>Events</th>
-              <th>Machines</th>
-              <th>Duration</th>
+              <th>Triggered At</th>
+              <th>Resolved At</th>
+              <th>Shift</th>
               <th>Status</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>M010 S11 01 - Cutting Black Starter Interlock (M010 S11 01)</td>
-              <td>613</td>
-              <td>1</td>
-              <td>31m 36s</td>
-              <td>43m ago</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>M010 S11 01 - Cutting Black Starter Interlock (M010 S11 01)</td>
-              <td>613</td>
-              <td>1</td>
-              <td>31m 36s</td>
-              <td>43m ago</td>
-            </tr>
-            {/* Additional rows as needed */}
+            {alerts.length > 0 ? (
+              alerts.map((alert, index) => (
+                <tr key={alert._id}>
+                  <td>{index + 1}</td>
+                  <td>{alert.alertType}</td>
+                  <td>{new Date(alert.triggeredAt).toLocaleString()}</td>
+                  <td>{alert.resolvedAt ? new Date(alert.resolvedAt).toLocaleString() : 'Not Resolved'}</td>
+                  <td>{alert.shiftId}</td>
+                  <td>{alert.resolvedAt ? 'Resolved' : 'Active'}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6" className="text-center">
+                  No alerts found for this machine.
+                </td>
+              </tr>
+            )}
           </tbody>
         </Table>
       </Container>

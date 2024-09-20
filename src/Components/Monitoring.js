@@ -7,6 +7,7 @@ import ServoTempCharta from '../Chart/ServoTemp';
 import EncoderChart from '../Chart/EncoderChart'
 import SpindleCharta from "../Chart/SpindleChart";
 import ServoLoadCharta from "../Chart/ServoLoadChart";
+import { useParams } from "react-router-dom";
 import {
   Container,
   Row,
@@ -113,9 +114,9 @@ const ToolLifeChart = ({machineId}) => (
 
 
 function ComponentName() {
-
-
-  const machineId = 'MACHINE3';
+  const machineId = localStorage.getItem('selectedMachineId');
+  // const { id: machineId } = useParams(); 
+  // const machineId = 'MACHINE2';
 
   return (
     <div

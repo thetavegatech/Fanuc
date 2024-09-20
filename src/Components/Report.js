@@ -4,8 +4,13 @@ import { Bar } from 'react-chartjs-2'; // Assuming you are using Chart.js
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import Files from './Files';
+import { useParams } from 'react-router-dom';
 
 const ReportPage = () => {
+  // const { machineId } = useParams();
+  const machineId = localStorage.getItem('selectedMachineId');
+
+  console.log(machineId)
   const [shifts, setShifts] = useState([]);
   const [productionData, setProductionData] = useState([]); // Ensure initial state is an array
   const [plannedData, setPlannedData] = useState([]); // Ensure initial state is an array
@@ -19,12 +24,12 @@ const ReportPage = () => {
         setShifts(Array.isArray(shiftResponse.data) ? shiftResponse.data : []); // Ensure data is an array
 
         // Fetch Production Data
-        const productionResponse = await axios.get('http://localhost:5001/api/machine-data/forall/ORG001/MACHINE2/productionData');
+        const productionResponse = await axios.get(`http://localhost:5001/api/machine-data/forall/ORG001/${machineId}/productionData`);
         const productionArray = Array.isArray(productionResponse.data.data) ? productionResponse.data.data : [];
         setProductionData(productionArray); // Set the production data array directly
 
         // Fetch Planned Quantity Data
-        const plannedResponse = await axios.get('http://localhost:5001/api/productionalldata');
+        const plannedResponse = await axios.get(`http://localhost:5001/api/productionalldata?machineId=${machineId}`);
         setPlannedData(Array.isArray(plannedResponse.data) ? plannedResponse.data : []); // Ensure data is an array
 
         setLoading(false); // Data fetched successfully

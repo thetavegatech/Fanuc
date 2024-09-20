@@ -1,30 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Button, InputGroup, Form } from 'react-bootstrap';
 import { Bar, Pie } from 'react-chartjs-2';
-import axios from 'axios'; // Make sure to import axios for API calls
+import axios from 'axios';
 import 'chart.js/auto';
-import { useParams } from 'react-router-dom'; 
+import { useParams } from 'react-router-dom';
 import Files from './Files';
 
 function Summary() {
-  const { machineId } = useParams(); // Get the machineId from the route parameters
+  const machineId = localStorage.getItem('selectedMachineId');
+  console.log(machineId)
+  // const { machineId: routeMachineId } = useParams();
+  // const machineId = routeMachineId || 'MACHINE2';
+
   const [availability, setAvailability] = useState(null);
   const [quality, setQuality] = useState(null);
   const [partsBehind, setPartsBehind] = useState(null);
-  const [targetProduction, setTargetProduction] = useState(null); // New state for TargetProduction
+  const [targetProduction, setTargetProduction] = useState(null);
   const [cycleTime, setCycleTime] = useState(null);
-  const [downtime, setDowntime] = useState(null); 
+  const [downtime, setDowntime] = useState(null);
   const [totalPartsProduced, setTotalPartsProduced] = useState(null);
-  const [machineStatus, setMachineStatus] = useState('Loading...'); // Set initial state to Loading
-  const [cycleTimeStats, setCycleTimeStats] = useState({ high: null, low: null, average: null }); // State for CycleTime statistics
+  const [machineStatus, setMachineStatus] = useState('Loading...');
+  const [cycleTimeStats, setCycleTimeStats] = useState({ high: null, low: null, average: null });
 
-  // Initialize availabilityData with sample data
   const [availabilityData, setAvailabilityData] = useState({
     labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
     datasets: [
       {
         label: 'Availability',
-        data: [90, 92, 94, 93, 94], // Initial static data
+        data: [90, 92, 94, 93, 94],
         backgroundColor: 'rgba(75, 192, 192, 0.6)',
       },
     ],
@@ -42,10 +45,10 @@ function Summary() {
   });
 
   const [partsBehindData, setPartsBehindData] = useState({
-    labels: ['Complete', 'Behind'],
+    labels: ['Complete', 'Pending'],
     datasets: [
       {
-        label: 'Parts Behind',
+        label: 'Parts Pending',
         data: [89, 11],
         backgroundColor: ['#36A2EB', '#FF6384'],
       },
@@ -76,26 +79,22 @@ function Summary() {
     }));
   };
 
-  const updatePartsBehindChartData = (complete, behind) => {
+  const updatePartsBehindChartData = (complete, Pending) => {
     setPartsBehindData((prevData) => ({
       ...prevData,
       datasets: [
         {
           ...prevData.datasets[0],
-          data: [complete, behind],
+          data: [complete, Pending],
         },
       ],
     }));
   };
 
-  // Function to fetch downtime data and calculate downtime
   const fetchDowntimeData = async () => {
     try {
       const response = await axios.get(`http://localhost:5001/api/downtime/machine/${machineId}`);
-      console.log("id", machineId);
       const downtimeData = response.data;
-
-      console.log('Downtime Data:', downtimeData);
 
       let totalDowntimeSeconds = 0;
 
@@ -126,21 +125,15 @@ function Summary() {
     }
   };
 
-  // Fetch machine status
   const fetchMachineStatus = async () => {
     try {
-      console.log('Fetching machine status for machineId:', machineId);
       const response = await axios.get(`http://localhost:5001/api/machine-status/getall`);
-      console.log('Machine status API response:', response.data);
-
       const machineData = response.data.find(machine => machine.machineId === machineId);
 
       if (machineData) {
-        console.log('Found machine status:', machineData.IsAvailable);
         const statusText = machineData.IsAvailable ? 'Available' : 'Unavailable';
         setMachineStatus(statusText);
       } else {
-        console.log('No status found for machineId:', machineId);
         setMachineStatus('Unknown');
       }
     } catch (error) {
@@ -149,29 +142,21 @@ function Summary() {
     }
   };
 
-  // Calculate Cycle Time statistics
   const calculateCycleTimeStats = (cycleTimes) => {
     if (!cycleTimes || cycleTimes.length === 0) {
       return { high: 'N/A', low: 'N/A', average: 'N/A' };
     }
 
     const cycleTimesInSeconds = cycleTimes.map(time => parseFloat(time));
-    const high = Math.max(...cycleTimesInSeconds);
-    const low = Math.min(...cycleTimesInSeconds);
+    const high = Math.max(...cycleTimesInSeconds).toFixed(2);
+    const low = Math.min(...cycleTimesInSeconds).toFixed(2);
     const average = (cycleTimesInSeconds.reduce((sum, value) => sum + value, 0) / cycleTimesInSeconds.length).toFixed(2);
 
     return {
-      high: secondsToHMS(high),
-      low: secondsToHMS(low),
-      average: secondsToHMS(average),
+      high: high,
+      low: low,
+      average: average,
     };
-  };
-
-  const secondsToHMS = (seconds) => {
-    const h = Math.floor(seconds / 3600);
-    const m = Math.floor((seconds % 3600) / 60);
-    const s = Math.floor(seconds % 60);
-    return `${h > 0 ? `${h}:` : ''}${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
   const fetchCycleTimeStats = async () => {
@@ -182,15 +167,8 @@ function Summary() {
       const cycleTimes = productionData.map(data => parseFloat(data.CycleTime)).filter(time => !isNaN(time));
 
       if (cycleTimes.length > 0) {
-        const high = Math.max(...cycleTimes);
-        const low = Math.min(...cycleTimes);
-        const average = (cycleTimes.reduce((sum, value) => sum + value, 0) / cycleTimes.length).toFixed(2);
-
-        setCycleTimeStats({
-          high: secondsToHMS(high),
-          low: secondsToHMS(low),
-          average: secondsToHMS(average),
-        });
+        const stats = calculateCycleTimeStats(cycleTimes);
+        setCycleTimeStats(stats);
       } else {
         setCycleTimeStats({ high: 'N/A', low: 'N/A', average: 'N/A' });
       }
@@ -239,10 +217,6 @@ function Summary() {
 
         const partsBehind = targetProduction - TotalPartsProduced;
         const complete = TotalPartsProduced;
-
-        console.log('OEE for MACHINE2:', OEE);
-        console.log('Machine Efficiency for MACHINE2:', machineEfficiency);
-        console.log('Parts Behind for MACHINE2:', partsBehind);
 
         setAvailability(availability);
         setQuality(quality);
@@ -356,7 +330,7 @@ function Summary() {
           </Col>
 
           <Col lg={4} md={6} sm={12} className="mb-4">
-            <h4 className="text-center">Parts Behind</h4>
+            <h4 className="text-center">Parts</h4>
             <div className="position-relative" style={{ height: '250px' }}>
               <Pie data={partsBehindData} options={{ maintainAspectRatio: false }} />
               <div
@@ -370,7 +344,7 @@ function Summary() {
                   color: '#000',
                 }}
               >
-                {partsBehind !== null ? `${partsBehind} Parts Behind` : 'Calculating...'}
+                {partsBehind !== null ? `${partsBehind} Parts Pending` : 'Calculating...'}
               </div>
             </div>
           </Col>

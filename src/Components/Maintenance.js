@@ -3,8 +3,12 @@ import { Container, Row, Col, Table,Button, InputGroup, Form  } from 'react-boot
 import { Bar } from 'react-chartjs-2'; // Assuming you're using Chart.js
 import 'chart.js/auto'; // Chart.js autoloading
 import Files from './Files';
+import { useParams } from 'react-router-dom';
 
 const MachineDetails = () => {
+  // const { machineId } = useParams(); // Get the machine ID from the URL
+  const { machineId: routeMachineId } = useParams();
+  const machineId = routeMachineId || 'MACHINE2';
   // Sample data for the bar chart
   const chartData = {
     labels: ['1/27', '1/37', '1/47', '1/57'],

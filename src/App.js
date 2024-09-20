@@ -25,6 +25,8 @@ import Shiftform from './View/ShiftForm';
 import PmcParameter from './View/PMCParameter';
 import OperatorPerformance from './View/OperatorPerformance';
 import DowntimeForm from './View/DownTime';
+import Files from './Components/Files';
+
 
 const Layout = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -71,6 +73,7 @@ const Layout = () => {
               <Route path="/pmc" element={<PmcParameter />} />
               <Route path="/operator" element={<OperatorPerformance />} />
               <Route path="/downtime" element={<DowntimeForm />} />
+              <Route path="/machine/:machineid/files" element={<Files />} />
             </Routes>
           </div>
         </div>

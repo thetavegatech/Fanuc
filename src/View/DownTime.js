@@ -1,69 +1,76 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const DowntimeForm = () => {
   const [machines, setMachines] = useState([]);
   const [downtimes, setDowntimes] = useState([]);
   const [formData, setFormData] = useState({
-    machineId: '',
-    assignedTechnician: '',
-    shift: '',
-    lineName: '',
-    location: '',
-    DownStartDateTime: '',
-    DownEndDateTime: '',
-    remark: '',
-    actionTaken: '',
-    downtimeReason: ''
+    machineId: "",
+    assignedTechnician: "",
+    shift: "",
+    lineName: "",
+    location: "",
+    DownStartDateTime: "",
+    DownEndDateTime: "",
+    remark: "",
+    actionTaken: "",
+    DownTimeReason: "",
   });
   const [showForm, setShowForm] = useState(false);
 
   const downtimeReasons = [
-    { id: 1, reason: 'Planned Maintenance' },
-    { id: 2, reason: 'Unplanned Maintenance' },
+    { id: 1, reason: "Planned Maintenance" },
+    { id: 2, reason: "Unplanned Maintenance" },
     // Add remaining reasons here...
   ];
 
   useEffect(() => {
-    axios.get('http://localhost:5001/api/machines')
-      .then(response => setMachines(response.data))
-      .catch(error => console.error(error));
+    axios
+      .get("http://localhost:5001/api/productionalldata")
+      .then((response) => {
+        console.log("Machines Data:", response.data); // Log the response to check structure
+        setMachines(response.data);
+      })
+      .catch((error) => console.error("Error fetching machines:", error));
   }, []);
 
   useEffect(() => {
-    axios.get('http://localhost:5001/api/downtime')
-      .then(response => setDowntimes(response.data))
-      .catch(error => console.error(error));
+    axios
+      .get("http://localhost:5001/api/downtime")
+      .then((response) => setDowntimes(response.data))
+      .catch((error) => console.error(error));
   }, []);
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:5001/api/downtime', formData)
-      .then(response => {
+    axios
+      .post("http://localhost:5001/api/downtime", formData)
+      .then((response) => {
+        console.log("Saved Downtime Record:", response.data);
         setDowntimes([...downtimes, response.data]); // Add new downtime to table
         setShowForm(false); // Hide form after submission
         setFormData({
-          machineId: '',
-          assignedTechnician: '',
-          shift: '',
-          lineName: '',
-          location: '',
-          DownStartDateTime: '',
-          DownEndDateTime: '',
-          remark: '',
-          actionTaken: '',
-          downtimeReason: ''
+          machineId: "",
+          assignedTechnician: "",
+          shift: "",
+          lineName: "",
+          location: "",
+          DownStartDateTime: "",
+          DownEndDateTime: "",
+          remark: "",
+          actionTaken: "",
+          DownTimeReason: "",
         });
       })
-      .catch(error => console.error(error));
+      .catch((error) => console.error(error));
   };
 
   const handleEdit = (downtime) => {
@@ -77,28 +84,37 @@ const DowntimeForm = () => {
       DownEndDateTime: downtime.DownEndDateTime,
       remark: downtime.remark,
       actionTaken: downtime.actionTaken,
-      downtimeReason: downtime.downtimeReason
+      DownTimeReason: downtime.DownTimeReason,
     });
     setShowForm(true); // Show the form for editing
   };
 
   const handleDelete = (id) => {
-    if (window.confirm('Are you sure you want to delete this downtime record?')) {
-      axios.delete(`http://localhost:5001/api/downtime/${id}`)
+    if (
+      window.confirm("Are you sure you want to delete this downtime record?")
+    ) {
+      axios
+        .delete(`http://localhost:5001/api/downtime/${id}`)
         .then(() => {
-          setDowntimes(downtimes.filter(downtime => downtime._id !== id)); // Update state to remove deleted downtime
+          setDowntimes(downtimes.filter((downtime) => downtime._id !== id)); // Update state to remove deleted downtime
         })
-        .catch(error => console.error(error));
+        .catch((error) => console.error(error));
     }
   };
 
   return (
-    <div className="container rounded p-5" style={{backgroundColor: '#f9f9f9', marginTop: '5rem'}}>
+    <div
+      className="container rounded p-5"
+      style={{ backgroundColor: "#f9f9f9", marginTop: "5rem" }}
+    >
       <h2 className="mb-1">Manage Downtime Records</h2>
       {!showForm && (
         <div className="row mb-4">
           <div className="col-12 text-start">
-            <button className="btn btn-primary" onClick={() => setShowForm(true)}>
+            <button
+              className="btn btn-primary"
+              onClick={() => setShowForm(true)}
+            >
               Add Downtime
             </button>
           </div>
@@ -119,11 +135,12 @@ const DowntimeForm = () => {
                   required
                 >
                   <option value="">Select Machine</option>
-                  {machines.map(machine => (
-                    <option key={machine._id} value={machine.machineId}>
-                      {machine.machineName}
-                    </option>
-                  ))}
+                  {machines.length > 0 &&
+                    machines.map((machine) => (
+                      <option key={machine._id} value={machine.machineId}>
+                        {machine.machineId} {/* Display machine name */}
+                      </option>
+                    ))}
                 </select>
               </div>
             </div>
@@ -131,14 +148,14 @@ const DowntimeForm = () => {
               <div className="inline-form-group">
                 <label>Downtime Reason</label>
                 <select
-                  name="downtimeReason"
+                  name="DownTimeReason" // Make sure this matches the state key
                   className="form-control underline-input"
-                  value={formData.downtimeReason}
+                  value={formData.DownTimeReason} // This should match the state key
                   onChange={handleChange}
                   required
                 >
                   <option value="">Select Reason</option>
-                  {downtimeReasons.map(reason => (
+                  {downtimeReasons.map((reason) => (
                     <option key={reason.id} value={reason.reason}>
                       {reason.reason}
                     </option>
@@ -261,7 +278,11 @@ const DowntimeForm = () => {
           <button type="submit" className="btn btn-primary me-2">
             Save Downtime
           </button>
-          <button type="button" className="btn btn-secondary" onClick={() => setShowForm(false)}>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => setShowForm(false)}
+          >
             Cancel
           </button>
         </form>
@@ -290,14 +311,26 @@ const DowntimeForm = () => {
                       <tr key={downtime._id}>
                         <td>{downtime.machineId}</td>
                         <td>{downtime.assignedTechnician}</td>
-                        <td>{downtime.downtimeReason}</td>
-                        <td>{new Date(downtime.DownStartDateTime).toLocaleString()}</td>
-                        <td>{new Date(downtime.DownEndDateTime).toLocaleString()}</td>
+                        <td>{downtime.DownTimeReason}</td>
                         <td>
-                          <button className="btn btn-warning btn-sm me-2" onClick={() => handleEdit(downtime)}>
+                          {new Date(
+                            downtime.DownStartDateTime
+                          ).toLocaleString()}
+                        </td>
+                        <td>
+                          {new Date(downtime.DownEndDateTime).toLocaleString()}
+                        </td>
+                        <td>
+                          <button
+                            className="btn btn-warning btn-sm me-2"
+                            onClick={() => handleEdit(downtime)}
+                          >
                             Edit
                           </button>
-                          <button className="btn btn-danger btn-sm" onClick={() => handleDelete(downtime._id)}>
+                          <button
+                            className="btn btn-danger btn-sm"
+                            onClick={() => handleDelete(downtime._id)}
+                          >
                             Delete
                           </button>
                         </td>

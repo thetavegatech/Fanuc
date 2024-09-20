@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Bar } from 'react-chartjs-2';
 
 import Footer from "./Footer";
 
@@ -139,9 +140,39 @@ const MachineCard = ({ id, title, status, statusColor, bgColor }) => {
   }, []);
 
   // Handle click on the card to navigate to the summary page with the machine ID
+  // const handleCardClick = () => {
+  //   navigate(`/machine/${id}`); // Navigate to the summary page, passing the machine ID
+  // };
+
   const handleCardClick = () => {
+    localStorage.setItem('selectedMachineId', id); 
     navigate(`/machine/${id}`); // Navigate to the summary page, passing the machine ID
   };
+
+
+    // Example data for charts (replace with actual data)
+    const chartData = {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+      datasets: [
+        {
+          label: 'Production',
+          data: [12, 19, 3, 5, 2, 3],
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1,
+        },
+      ],
+    };
+  
+    const chartOptions = {
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    };
+
 
   return (
     <Card className="h-100 w-100" style={{ borderRadius: '5px', cursor: 'pointer' }} onClick={handleCardClick}>
@@ -181,6 +212,16 @@ const MachineCard = ({ id, title, status, statusColor, bgColor }) => {
           </Carousel.Item>
         </Carousel>
       </Card.Body>
+      <div className="mt-3">
+          <Row>
+            <Col className="text-center">
+              <h6 className="mb-2">Production Over Time</h6>
+              <div style={{ height: '150px' }}>
+                <Bar data={chartData} options={chartOptions} />
+              </div>
+            </Col>
+          </Row>
+        </div>
     </Card>
   );
 };
