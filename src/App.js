@@ -1,67 +1,4 @@
 
-
-
-// running 
-// import React, { useState } from 'react';
-// import Sidebar from '../src/Components/Sidebar.js';
-// import Navbar from '../src/Components/Navbar.js';
-// import 'bootstrap/dist/css/bootstrap.min.css';
-// import Dashboard from './Components/Dashboard.js';
-// // import Footer from './Components/Footer.js';
-// // import Home from './Components/Home.js';
-// // import Footer from './Components/Footer.js';
-
-// const Layout = () => {
-//   const [collapsed, setCollapsed] = useState(false);
-
-//   const toggleSidebar = () => setCollapsed(!collapsed);
-
-//   return (
-//     // <div className="d-flex">
-//     //   <div className="flex-grow-1">
-//     //     <Navbar collapsed={collapsed} toggleSidebar={toggleSidebar} />
-//     //     {/* <main className="flex-grow-1 p-0" style={{ backgroundColor: 'lightgrey'}}> */}
-//     //       {/* Main content goes here */}
-//     //       <Dashboard />
-//     //       {/* <Home /> */}
-//     //     {/* </main> */}
-//     //   </div>
-//     //   <Sidebar collapsed={collapsed} toggleSidebar={toggleSidebar} />
-      
-      
-//     //   {/* <Footer /> Add the Footer component here */}
-//     // </div>
-  
-    
-//       <div className="d-flex">
-//       {/* Sidebar */}
-//       <Sidebar collapsed={collapsed} toggleSidebar={toggleSidebar} />
-      
-//       {/* Main content area */}
-//       <div
-//         className="main-content"
-//         style={{
-//           marginLeft: collapsed ? '60px' : '260px', // Adjust content margin based on sidebar state
-//           transition: 'margin-left 0.3s ease', // Smooth transition for sliding effect
-//           width: collapsed ? 'calc(100% - 60px)' : 'calc(100% - 260px)',
-          
-//            // Adjust width based on sidebar state
-//         }}
-//       >
-//         <div className="p-0" >
-//         <Navbar collapsed={collapsed} toggleSidebar={toggleSidebar} />
-//           <Dashboard />
-//           {/* <Footer /> */}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default Layout;
-
-
-
 // working
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
@@ -87,6 +24,7 @@ import TPMSForm from './View/TPMSForm';
 import Shiftform from './View/ShiftForm';
 import PmcParameter from './View/PMCParameter';
 import OperatorPerformance from './View/OperatorPerformance';
+import DowntimeForm from './View/DownTime';
 
 const Layout = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -114,7 +52,7 @@ const Layout = () => {
             {/* Routes for different pages */}
             <Routes>
               <Route path="/" element={<Dashboard />} />
-              <Route path="/machine/:id" element={<Summary />} />  {/* Machine detail page route */}
+              <Route path="/machine/:machineId" element={<Summary />} />  {/* Machine detail page route */}
               <Route path="/report" element={<Report />} />
               <Route path="/summary" element={<Summary />} />
               <Route path="/alert" element={<Alerts />} />
@@ -132,6 +70,7 @@ const Layout = () => {
               <Route path="/shift" element={<Shiftform />} />
               <Route path="/pmc" element={<PmcParameter />} />
               <Route path="/operator" element={<OperatorPerformance />} />
+              <Route path="/downtime" element={<DowntimeForm />} />
             </Routes>
           </div>
         </div>

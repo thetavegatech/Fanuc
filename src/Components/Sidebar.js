@@ -17,7 +17,7 @@ const Sidebar = ({ collapsed, toggleSidebar }) => {
     { icon: '🏠', text: 'Dashboard', path: '/' },
     { icon: '🛠️', text: 'Add Asset', path: '/machineform' },
     { icon: '📊', text: 'Breakdown', path: '/breakdownform' },
-    { icon: '🔧', text: 'Mainten Schedule', path: '/maintenanceschedule' },
+    { icon: '🔧', text: 'Maintenance Schedule', path: '/maintenanceschedule' },
     { icon: '👷', text: 'Add Part', path: '/part' },
     { icon: '🔨', text: 'Add Skills', path: '/skillsform' },
     { icon: '✔️', text: 'Add Users', path: '/workforce' },
@@ -27,13 +27,14 @@ const Sidebar = ({ collapsed, toggleSidebar }) => {
     { icon: '🔔', text: 'Add Shift', path: '/shift' },
     { icon: '📊', text: 'PMC Parameters', path: '/pmc' },
     { icon: '🔧', text: 'Operator Performance', path: '/operator' },
+    { icon: '📊', text: 'DownTime', path: '/downtime' },
   ];
 
   return (
     <div
       className="bg-dark text-white position-fixed d-flex flex-column"
       style={{
-        width: collapsed ? '70px' : '250px', // Adjust width when collapsed
+        width: collapsed ? '70px' : '240px', // Adjust width when collapsed
         height: '100vh', // Full viewport height
         transition: 'width 0.3s ease', // Smooth transition for width
         zIndex: 1000,
@@ -47,7 +48,7 @@ const Sidebar = ({ collapsed, toggleSidebar }) => {
           alt="User Profile"
           className="rounded-circle"
           style={{
-            
+
             width: collapsed ? '40px' : '60px',
             height: collapsed ? '40px' : '60px',
             objectFit: 'cover',
@@ -62,7 +63,7 @@ const Sidebar = ({ collapsed, toggleSidebar }) => {
       {/* Collapse Button */}
       {/* <div className="text-center mb-3">
         <button className="btn btn-dark w-100" onClick={toggleSidebar}>
-          <i className={`bi ${collapsed ? 'bi-caret-right' : 'bi-caret-left'}`}></i>
+          <i className={bi ${collapsed ? 'bi-caret-right' : 'bi-caret-left'}}></i>
         </button>
       </div> */}
 

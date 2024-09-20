@@ -168,7 +168,7 @@ const CncMachineform = () => {
               <input
                 type="text"
                 name="machineId"
-                className="form-control"
+                className="underline-input"
                 value={formData.machineId}
                 onChange={handleInputChange}
                 required
@@ -181,7 +181,7 @@ const CncMachineform = () => {
               <input
                 type="text"
                 name="organizationId"
-                className="form-control"
+                className="underline-input"
                 value={formData.organizationId}
                 onChange={handleInputChange}
                 required
@@ -194,7 +194,7 @@ const CncMachineform = () => {
               <input
                 type="text"
                 name="assetId"
-                className="form-control"
+                className="underline-input"
                 value={formData.assetId}
                 onChange={handleInputChange}
                 required
@@ -210,7 +210,7 @@ const CncMachineform = () => {
               <input
                 type="text"
                 name="machineName"
-                className="form-control"
+                className="underline-input"
                 value={formData.machineName}
                 onChange={handleInputChange}
                 required
@@ -223,7 +223,7 @@ const CncMachineform = () => {
               <input
                 type="text"
                 name="machineType"
-                className="form-control"
+                className="underline-input"
                 value={formData.machineType}
                 onChange={handleInputChange}
               />
@@ -235,7 +235,7 @@ const CncMachineform = () => {
               <input
                 type="text"
                 name="status"
-                className="form-control"
+                className="underline-input"
                 value={formData.status}
                 onChange={handleInputChange}
               />
@@ -250,7 +250,7 @@ const CncMachineform = () => {
               <input
                 type="text"
                 name="location"
-                className="form-control"
+                className="underline-input"
                 value={formData.location}
                 onChange={handleInputChange}
               />
@@ -262,7 +262,7 @@ const CncMachineform = () => {
               <input
                 type="text"
                 name="cell"
-                className="form-control"
+                className="underline-input"
                 value={formData.cell}
                 onChange={handleInputChange}
               />
@@ -278,7 +278,7 @@ const CncMachineform = () => {
               ) : (
                 <select
                   name="assignedTechnician"
-                  className="form-control"
+                  className="underline-input"
                   value={formData.assignedTechnician}
                   onChange={handleInputChange}
                 >
@@ -301,7 +301,7 @@ const CncMachineform = () => {
               <input
                 type="text"
                 name="machineMake"
-                className="form-control"
+                className="underline-input"
                 value={formData.machineMake}
                 onChange={handleInputChange}
               />
@@ -313,7 +313,7 @@ const CncMachineform = () => {
               <input
                 type="text"
                 name="machineModel"
-                className="form-control"
+                className="underline-input"
                 value={formData.machineModel}
                 onChange={handleInputChange}
               />
@@ -325,7 +325,7 @@ const CncMachineform = () => {
               <input
                 type="text"
                 name="machineController"
-                className="form-control"
+                className="underline-input"
                 value={formData.machineController}
                 onChange={handleInputChange}
               />
@@ -340,7 +340,7 @@ const CncMachineform = () => {
               <input
                 type="number"
                 name="yearOfManufacturing"
-                className="form-control"
+                className="underline-input"
                 value={formData.yearOfManufacturing}
                 onChange={handleInputChange}
               />
@@ -352,7 +352,7 @@ const CncMachineform = () => {
               <input
                 type="text"
                 name="machineIP"
-                className="form-control"
+                className="underline-input"
                 value={formData.machineIP}
                 onChange={handleInputChange}
               />
@@ -364,7 +364,7 @@ const CncMachineform = () => {
               <input
                 type="number"
                 name="spindleCount"
-                className="form-control"
+                className="underline-input"
                 value={formData.spindleCount}
                 onChange={handleInputChange}
               />
@@ -379,7 +379,7 @@ const CncMachineform = () => {
               <input
                 type="number"
                 name="batteryCount"
-                className="form-control"
+                className="underline-input"
                 value={formData.batteryCount}
                 onChange={handleInputChange}
               />
@@ -391,7 +391,7 @@ const CncMachineform = () => {
               <input
                 type="text"
                 name="machineCapacity"
-                className="form-control"
+                className="underline-input"
                 value={formData.machineCapacity}
                 onChange={handleInputChange}
               />
@@ -403,7 +403,7 @@ const CncMachineform = () => {
               <input
                 type="text"
                 name="powerRating"
-                className="form-control"
+                className="underline-input"
                 value={formData.powerRating}
                 onChange={handleInputChange}
               />
@@ -418,7 +418,7 @@ const CncMachineform = () => {
               <input
                 type="text"
                 name="machineCategory"
-                className="form-control"
+                className="underline-input"
                 value={formData.machineCategory}
                 onChange={handleInputChange}
               />
@@ -429,7 +429,7 @@ const CncMachineform = () => {
               <label>Other Details</label>
               <textarea
                 name="otherDetails"
-                className="form-control"
+                className="underline-input"
                 rows="3"
                 value={formData.otherDetails}
                 onChange={handleInputChange}

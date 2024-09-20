@@ -1,87 +1,51 @@
-import { useParams } from "react-router-dom";
-import React from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Table,
-  Navbar,
-  Nav,
-  Footer,
-  Button,
-  Form,
-  InputGroup,
-} from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
+
+import { useParams, Link } from 'react-router-dom';
+import React from 'react';
+import { Container, Row, Col, Table, Navbar, Nav, Footer, Button, Form, InputGroup } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Files from './Files';
 
 const MachineDetails = () => {
-  const { id } = useParams(); // Extract the machine ID from the URL
+  const { id } = useParams();  // Extract the machine ID from the URL
 
   return (
     <div
-      fluid
       style={{
-        marginTop: "4rem",
-        backgroundColor: "white",
-        maxWidth: "100%",
-        borderRadius: "8px",
-        padding: "10px",
-        boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-        // marginBottom: "10px",
-        height: "Auto",
+        backgroundColor: 'white',
+        maxWidth: '100%',
+        borderRadius: '8px',
+        padding: '0px',
+        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
+        marginTop: '55px',
+        height: 'auto',
       }}
     >
       {/* Top Filters */}
       <Row
         style={{
-          backgroundColor: "#f2f2f2",
-          padding: "10px",
-          borderRadius: "2px",
-          marginBottom: "5px",
+          backgroundColor: '#f2f2f2',
+          padding: '8px',
+          borderRadius: '2px',
+          marginLeft: '1px',
         }}
         className="align-items-center"
       >
-        <Col
-          xs={12}
-          md={5}
-          className="d-flex justify-content-between mb-3 mb-md-0"
-          style={{ gap: "10px" }}
-        >
-          <Button
-            variant="outline-primary"
-            className="custom-btn"
-            style={{ flex: "1" }}
-          >
+        <Col xs={12} md={5} className="d-flex justify-content-between mb-3 mb-md-0" style={{ gap: '10px' }}>
+          <Button variant="primary" style={{ flex: '1' }}>
             This Shift
           </Button>
-          <Button
-            variant="outline-secondary"
-            className="custom-btn"
-            style={{ flex: "1" }}
-          >
+          <Button variant="secondary" style={{ flex: '1' }}>
             Last Shift
           </Button>
-          <Button
-            variant="outline-success"
-            className="custom-btn"
-            style={{ flex: "1" }}
-          >
+          <Button variant="success" style={{ flex: '1' }}>
             Last Hr
           </Button>
-          <Button
-            variant="outline-info"
-            className="custom-btn"
-            style={{ flex: "1" }}
-          >
+          <Button variant="info" style={{ flex: '1' }}>
             Today
           </Button>
         </Col>
 
-        <Col
-          xs={12}
-          md={4}
-          className="d-flex justify-content-md-center mb-3 mb-md-0"
-        >
+        <Col xs={12} md={4} className="d-flex justify-content-md-center mb-3 mb-md-0">
           <InputGroup>
             <InputGroup.Text>From:</InputGroup.Text>
             <Form.Control type="date" />
@@ -91,75 +55,91 @@ const MachineDetails = () => {
         </Col>
 
         <Col xs={12} md={3} className="d-flex justify-content-md-end">
-          <Form.Control
-            type="search"
-            placeholder="Search"
-            style={{ width: "100%", maxWidth: "200px" }}
-          />
+          <Form.Control type="search" placeholder="Search" style={{ width: '100%', maxWidth: '200px' }} />
         </Col>
       </Row>
-
-      <nav style={{ marginBottom: "5px" }}>
-        <ul className="d-flex justify-content-between">
-          <li>
-            <a href="/summary">Summary</a>
-          </li>
-          <li>
-            <a href="/monitoring">Monitoring</a>
-          </li>
-          <li>
-            <a href="/maintenance">Maintenance</a>
-          </li>
-          <li>
-            <a href="/report">Report</a>
-          </li>
-          <li>
-            <a href="/alert">Alerts</a>
-          </li>
-        </ul>
-      </nav>
-      {/* Machine Info Section */}
-      <nav className="nav1">
-        <ul className="d-flex justify-content-between align-items-center minimized-nav">
-          <li>
-            <h5 className="small-text">CNC-1 Crank Shaft</h5>
-            {/* <p className="small-text">Crank Shaft</p> */}
-          </li>
-          <li>
-            <p className="small-text">Work 3:12</p>
-            {/* <h4 className="small-text">3:12</h4> */}
-          </li>
-          <li className="small-text">Idle for 3 Minutes</li>
-        </ul>
-      </nav>
 
       {/* Navigation */}
       {/* <Navbar style={{ backgroundColor: '#ff7f0e' }} className="text-white">
         <Nav className="w-100 d-flex justify-content-between">
           <Nav.Item>
-            <Nav.Link href="MachineDetails.js" className="text-white">Summary</Nav.Link>
+            <Nav.Link as={Link} to="/" className="text-white">Summary</Nav.Link>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link href="Diagnostics.js" className="text-white">Monitoring</Nav.Link>
+            <Nav.Link as={Link} to={`/machine/${id}`} className="text-white">Monitoring</Nav.Link>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link href="maintenance.js" className="text-white">Maintenance</Nav.Link>
+            <Nav.Link as={Link} to="/maintenance" className="text-white">Maintenance</Nav.Link>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link href="/report" className="text-white">Report</Nav.Link>
+            <Nav.Link as={Link} to="/report" className="text-white border-2">Report</Nav.Link>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link href="Alerts.js" className="text-white">Alerts</Nav.Link>
+            <Nav.Link as={Link} to="/alerts" className="text-white">Alerts</Nav.Link>
           </Nav.Item>
         </Nav>
       </Navbar> */}
+       {/* <nav
+  style={{
+    backgroundColor: 'gray',
+    height: '5%',  // Adjust height automatically to content
+    padding: '10px 0',  // Padding for better look
+    width: '100%',  // Full width for the navigation
+  }}
+  className="text-white me-2"
+>
+  <Container fluid>
+    <Row className="w-140 gx-1 text-center">   Increased gap between columns using gx-4
+      <Col xs={12} md={2} className="d-flex justify-content-center align-items-center mb-2 mb-md-0">
+        <a href="/summary" className="text-white text-center px-3 py-2" style={{ fontSize: '1.2rem' }}>
+          Summary
+        </a>
+      </Col>
+      <Col xs={12} md={3} className="d-flex justify-content-center align-items-center mb-2 mb-md-0">
+        <a href="/monitoring" className="text-white text-center px-3 py-2" style={{ fontSize: '1.2rem' }}>
+          Monitoring
+        </a>
+      </Col>
+      <Col xs={12} md={2} className="d-flex justify-content-center align-items-center mb-2 mb-md-0">
+        <a href="/maintenance" className="text-white text-center px-3 py-2" style={{ fontSize: '1.2rem' }}>
+          Maintenance
+        </a>
+      </Col>
+      <Col xs={12} md={2} className="d-flex justify-content-center align-items-center mb-2 mb-md-0">
+        <a href="/report" className="text-white text-center px-3 py-2" style={{ fontSize: '1.2rem' }}>
+          Report
+        </a>
+      </Col>
+      <Col xs={12} md={2} className="d-flex justify-content-center align-items-center mb-2 mb-md-0">
+        <a href="/alerts" className="text-white text-center px-3 py-2" style={{ fontSize: '1.2rem' }}>
+          Alerts
+        </a>
+      </Col>
+    </Row>
+  </Container>
+</nav> */}
+<Files />
 
       {/* Machine Info Section */}
+      <Container fluid className="my-0 rounded bg-primary">
+      <Row className="text-center py-2" style={{ backgroundColor: '#ff7f0e' }}>
+        <Col>
+          <h5 className="text-white">CNC-1 Crank Shaft</h5>
+        </Col>
+        <Col>
+          <h5 className="text-white">Work 3:12</h5>
+        </Col>
+        <Col>
+          <h5 className="text-white">Idle for 3 Minutes</h5>
+        </Col>
+      </Row>
+    </Container>
+
 
       {/* Table Section */}
-      <Container fluid className="mb-4" style={{ paddingTop: "2rem" }}>
+      <Container fluid className="mb-4">
         <Table striped bordered hover responsive="sm">
-          <thead className="" style={{backgroundColor: "#f8c9a1"}}>
+          <thead className='bg-primary rounded'>
             <tr>
               <th>#</th>
               <th>Description</th>
@@ -172,9 +152,7 @@ const MachineDetails = () => {
           <tbody>
             <tr>
               <td>1</td>
-              <td>
-                M010 S11 01 - Cutting Black Starter Interlock (M010 S11 01)
-              </td>
+              <td>M010 S11 01 - Cutting Black Starter Interlock (M010 S11 01)</td>
               <td>613</td>
               <td>1</td>
               <td>31m 36s</td>
@@ -182,9 +160,7 @@ const MachineDetails = () => {
             </tr>
             <tr>
               <td>2</td>
-              <td>
-                M010 S11 01 - Cutting Black Starter Interlock (M010 S11 01)
-              </td>
+              <td>M010 S11 01 - Cutting Black Starter Interlock (M010 S11 01)</td>
               <td>613</td>
               <td>1</td>
               <td>31m 36s</td>
